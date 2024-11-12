@@ -551,13 +551,12 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled rejection at:', promise, 'reason:', reason);
 });
 
-// Read the certificate and key
-const options = {
-    key: fs.readFileSync(`${process.env.AD_KEY_FILE}`),
-    cert: fs.readFileSync(`${process.env.AD_CERT_FILE}`)
-};
 
-https.createServer(options, app).listen(process.env.AD_HOST_PORT, async () => {
+// No need for SSL options as GCLB will handle HTTPS termination
+
+http.createServer(app).listen(process.env.AD_HOST_PORT, async () => {
+    console.log(`HTTP server running on port ${PORT}`);
+    
     if (process.env.AD_KEYMASTER_URL) {
         keymaster = keymaster_sdk;
         await keymaster.start({
