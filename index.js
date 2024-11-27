@@ -3,7 +3,7 @@ import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
-import https from 'https';
+import http from 'http';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -551,13 +551,8 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled rejection at:', promise, 'reason:', reason);
 });
 
-// Read the certificate and key
-const options = {
-    key: fs.readFileSync(`${process.env.AD_KEY_FILE}`),
-    cert: fs.readFileSync(`${process.env.AD_CERT_FILE}`)
-};
 
-https.createServer(options, app).listen(process.env.AD_HOST_PORT, async () => {
+http.createServer(app).listen(process.env.AD_HOST_PORT, async () => {
     if (process.env.AD_KEYMASTER_URL) {
         keymaster = keymaster_sdk;
         await keymaster.start({
@@ -582,7 +577,5 @@ https.createServer(options, app).listen(process.env.AD_HOST_PORT, async () => {
     await verifyDb();
     console.log(`auth-demo using keymaster at ${process.env.AD_KEYMASTER_URL}`);
     console.log(`auth-demo using wallet at ${process.env.AD_WALLET_URL}`);
-    console.log(`auth-demo using key file ${process.env.AD_KEY_FILE}`);
-    console.log(`auth-demo using cert file ${process.env.AD_CERT_FILE}`);
     console.log(`auth-demo listening at ${process.env.AD_HOST_URL}`);
 });

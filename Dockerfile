@@ -20,7 +20,6 @@ RUN cd auth-client && npm run build
 
 # Copy app
 COPY *.js .
-COPY *.pem .
 
 # Run...
 CMD ["node", "index.js"]
