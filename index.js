@@ -3,7 +3,7 @@ import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
-import http from 'http';
+import https from 'https';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -552,7 +552,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 
-http.createServer(app).listen(process.env.AD_HOST_PORT, async () => {
+https.createServer(app).listen(process.env.AD_HOST_PORT, async () => {
     if (process.env.AD_KEYMASTER_URL) {
         keymaster = keymaster_sdk;
         await keymaster.start({
